@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Ekstraksi Jurnal & Arus Kas Keuangan Mahad</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono untuk angka/kode -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Library ExcelJS untuk ekstraksi Fitur 1 -->
+    <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+    
+    <style>
+        :root {
+            /* Bright Sea Glass Palette */
+            --lagoon-50: #f0fdfa;
+            --lagoon-100: #ccfbf1;
+            --lagoon-200: #99f6e4;
+            --lagoon-400: #2dd4bf;
+            --lagoon-500: #14b8a6;
+            --lagoon-600: #0d9488;
+            --ocean-blue: #0284c7;
+            --ocean-cyan: #06b6d4;
+            --ocean-dark: #0f2942;
+            
+            --coral-rose: #f43f5e;
+            --coral-light: #fff1f2;
+            --coral-border: #fecdd3;
+
+            /* Bright Frosted Glass */
+            --glass-card: rgba(255, 255, 255, 0.82);
+            --glass-card-hover: rgba(255, 255, 255, 0.95);
+            --glass-border: rgba(255, 255, 255, 0.9);
+            --glass-shadow: 0 16px 36px -6px rgba(13, 148, 136, 0.12), 0 4px 14px -2px rgba(2, 132, 199, 0.08);
+            
+            --slate-900: #0c2134;
+            --slate-700: #1e3a5f;
+            --slate-600: #335377;
+            --slate-500: #547597;
+            --slate-300: #cbd5e1;
+            --slate-200: #e2e8f0;
+            --slate-100: #f1f5f9;
+
+            --radius-2xl: 20px;
+            --radius-xl: 14px;
+            --radius-lg: 10px;
+            --radius-md: 8px;
+            --radius-pill: 9999px;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            font-size: 12.5px;
+            color: var(--slate-900);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Bright Coastal Ambient Background */
+        body {
+            margin: 0;
+            padding: 28px 18px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0fdfa;
+            background-image: 
+                radial-gradient(circle at 8% 12%, rgba(45, 212, 191, 0.38) 0%, transparent 40%),
+                radial-gradient(circle at 92% 18%, rgba(6, 182, 212, 0.32) 0%, transparent 45%),
+                radial-gradient(circle at 50% 85%, rgba(125, 211, 252, 0.45) 0%, transparent 55%),
+                linear-gradient(135deg, #e6fffa 0%, #f0fdfa 45%, #e0f2fe 100%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1280px;
+        }
+
+        /* Header Cerah & Bersih */
+        .app-header {
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 253, 250, 0.85) 100%);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1.5px solid var(--glass-border);
+            padding: 20px 26px;
+            border-radius: var(--radius-2xl);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--glass-shadow);
+        }
+        .app-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .app-logo {
+            width: 46px;
+            height: 46px;
+            background: linear-gradient(135deg, #14b8a6, #0284c7);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 8px 16px rgba(20, 184, 166, 0.28);
+            border: 2px solid #ffffff;
+        }
+        .app-header h1 {
+            font-size: 18px;
+            margin: 0;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(120deg, #0d9488, #0284c7);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .app-header p {
+            font-size: 12px;
+            margin: 3px 0 0 0;
+            color: var(--slate-500);
+            font-weight: 500;
+        }
+        .badge-bright {
+            background: linear-gradient(135deg, #ccfbf1, #e0f2fe);
+            border: 1px solid var(--lagoon-200);
+            color: var(--lagoon-600);
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+        }
+
+        /* Modern Segmented Navigation Pill */
+        .nav-dock {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(14px);
+            border: 1.5px solid var(--glass-border);
+            padding: 6px;
+            border-radius: var(--radius-2xl);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 8px;
+            box-shadow: var(--glass-shadow);
+        }
+        .nav-pill {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--slate-600);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            user-select: none;
+        }
+        .nav-pill .icon {
+            font-size: 17px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .nav-pill:hover {
+            color: var(--lagoon-600);
+            background: rgba(255, 255, 255, 0.5);
+        }
+        .nav-pill.active {
+            background: #ffffff;
+            color: var(--lagoon-600);
+            box-shadow: 0 4px 16px rgba(13, 148, 136, 0.12);
+        }
+        .nav-pill.active .icon {
+            background: linear-gradient(135deg, #14b8a6, #06b6d4);
+            color: white;
+            box-shadow: 0 4px 10px rgba(20, 184, 166, 0.3);
+        }
+
+        /* Glass Card Container */
+        .card {
+            background: var(--glass-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1.5px solid var(--glass-border);
+            padding: 22px 24px;
+            margin-bottom: 20px;
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--glass-shadow);
+        }
+
+        /* Interactive File Dropzone */
+        .dropzone-box {
+            border: 2px dashed #99f6e4;
+            background: linear-gradient(135deg, rgba(240, 253, 250, 0.85) 0%, rgba(240, 249, 255, 0.75) 100%);
+            border-radius: var(--radius-xl);
+            padding: 26px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .dropzone-box:hover {
+            border-color: var(--lagoon-500);
+            background: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(20, 184, 166, 0.12);
+        }
+        .dropzone-icon {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #14b8a6, #0284c7);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #fff;
+            box-shadow: 0 6px 16px rgba(20, 184, 166, 0.25);
+            margin-bottom: 8px;
+        }
+        .dropzone-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--slate-900);
+        }
+        .dropzone-sub {
+            font-size: 11.5px;
+            color: var(--slate-500);
+            margin-top: 2px;
+        }
+        .file-hidden-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Grid Controls */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 14px;
+            margin-top: 14px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        label {
+            font-size: 10.5px;
+            font-weight: 800;
+            color: var(--slate-600);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        input, select, textarea {
+            padding: 9px 13px;
+            border: 1.5px solid var(--slate-200);
+            border-radius: var(--radius-lg);
+            outline: none;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--slate-900);
+            transition: all 0.2s ease;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--lagoon-500);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.18);
+        }
+        textarea {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            line-height: 1.5;
+            resize: vertical;
+        }
+
+        .picker-btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1.5px solid var(--slate-200);
+            border-radius: var(--radius-lg);
+            padding: 9px 13px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+        .picker-btn:hover {
+            border-color: var(--lagoon-500);
+            background: #ffffff;
+        }
+
+        /* Modern Buttons */
+        .btn {
+            border: none;
+            padding: 9px 16px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: var(--radius-lg);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            transition: all 0.2s ease;
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(20, 184, 166, 0.25);
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+            box-shadow: 0 6px 18px rgba(20, 184, 166, 0.35);
+        }
+        .btn-blue {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+        }
+        .btn-blue:hover {
+            background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+        }
+        .btn-outline {
+            background: #ffffff;
+            border: 1.5px solid var(--slate-200);
+            color: var(--slate-700);
+        }
+        .btn-outline:hover {
+            border-color: var(--lagoon-500);
+            color: var(--lagoon-600);
+            background: var(--lagoon-50);
+        }
+
+        /* Bright Floating Stat Cards */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            border-radius: var(--radius-xl);
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            box-shadow: 0 6px 16px rgba(12, 33, 52, 0.04);
+            border: 1.5px solid rgba(255, 255, 255, 0.95);
+            transition: all 0.25s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(12, 33, 52, 0.08);
+        }
+        .stat-card .stat-label {
+            font-size: 10.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .stat-card .stat-value {
+            font-size: 18px;
+            font-weight: 800;
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stat-card.tunai {
+            background: linear-gradient(135deg, rgba(204, 251, 241, 0.75) 0%, rgba(255, 255, 255, 0.9) 100%);
+            border-color: #99f6e4;
+        }
+        .stat-card.tunai .stat-label { color: #0d9488; }
+        .stat-card.tunai .stat-value { color: #0f766e; }
+
+        .stat-card.bank {
+            background: linear-gradient(135deg, rgba(224, 242, 254, 0.75) 0%, rgba(255, 255, 255, 0.9) 100%);
+            border-color: #bae6fd;
+        }
+        .stat-card.bank .stat-label { color: #0284c7; }
+        .stat-card.bank .stat-value { color: #0369a1; }
+
+        .stat-card.pelunasan {
+            background: linear-gradient(135deg, rgba(255, 241, 242, 0.75) 0%, rgba(255, 255, 255, 0.9) 100%);
+            border-color: #fecdd3;
+        }
+        .stat-card.pelunasan .stat-label { color: #e11d48; }
+        .stat-card.pelunasan .stat-value { color: #be123c; }
+
+        .stat-card.total {
+            background: linear-gradient(135deg, rgba(238, 242, 255, 0.75) 0%, rgba(255, 255, 255, 0.9) 100%);
+            border-color: #c7d2fe;
+        }
+        .stat-card.total .stat-label { color: #4f46e5; }
+        .stat-card.total .stat-value { color: #4338ca; }
+
+        /* Modern Tabs */
+        .sub-tab-nav {
+            display: flex;
+            gap: 8px;
+            border-bottom: 2px solid var(--slate-200);
+            margin-bottom: 16px;
+        }
+        .sub-tab-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 18px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            color: var(--slate-500);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s ease;
+        }
+        .sub-tab-btn:hover {
+            color: var(--lagoon-600);
+        }
+        .sub-tab-btn.active {
+            color: var(--lagoon-600);
+            border-bottom-color: var(--lagoon-500);
+            background: #ffffff;
+        }
+
+        /* Clean High-Legibility Data Tables */
+        .table-responsive {
+            overflow-x: auto;
+            border: 1.5px solid var(--slate-200);
+            border-radius: var(--radius-xl);
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(12, 33, 52, 0.03);
+        }
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11.5px;
+        }
+        table.data-table th, table.data-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--slate-200);
+        }
+        table.data-table th {
+            background: #f8fafc;
+            font-weight: 800;
+            color: var(--slate-600);
+            text-align: left;
+            font-size: 10.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        table.data-table tbody tr {
+            transition: background 0.15s ease;
+        }
+        table.data-table tbody tr:hover {
+            background: #f0fdfa;
+        }
+        table.data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        table.data-table tfoot td {
+            background: #f8fafc;
+            font-weight: 800;
+            border-top: 2px solid var(--slate-200);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 9px;
+            border-radius: var(--radius-pill);
+            font-size: 10.5px;
+            font-weight: 700;
+        }
+        .badge-tunai {
+            background: var(--lagoon-100);
+            color: var(--lagoon-600);
+            border: 1px solid var(--lagoon-200);
+        }
+        .badge-bank {
+            background: #e0f2fe;
+            color: var(--ocean-blue);
+            border: 1px solid #bae6fd;
+        }
+
+        /* Utility Styles & Minus Color */
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .font-bold { font-weight: 700; }
+        .num-font { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+        .text-red { color: var(--coral-rose) !important; font-weight: 700; }
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        /* Modern Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--slate-900);
+            color: #ffffff;
+            padding: 12px 22px;
+            border-radius: var(--radius-lg);
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            font-weight: 700;
+            font-size: 12px;
+            animation: floatUp 0.25s ease;
+        }
+        @keyframes floatUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(12, 33, 52, 0.5);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        .modal-box {
+            background: #ffffff;
+            border-radius: var(--radius-2xl);
+            width: 90%;
+            max-width: 580px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .modal-header h2 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--slate-900);
+        }
+        .modal-list {
+            overflow-y: auto;
+            flex: 1;
+            border: 1.5px solid var(--slate-200);
+            margin-top: 12px;
+            max-height: 380px;
+            border-radius: var(--radius-lg);
+        }
+        .modal-item {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--slate-100);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.15s ease;
+        }
+        .modal-item:hover {
+            background: var(--lagoon-50);
+            color: var(--lagoon-600);
+        }
+        .modal-item-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 800;
+            color: var(--lagoon-600);
+            background: var(--lagoon-100);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Suggestions Datalist untuk Nama PIC -->
+    <datalist id="picSuggestions"></datalist>
+
+    <div class="container">
+        <!-- Modern Fresh Header -->
+        <div class="app-header">
+            <div class="app-brand">
+                <div class="app-logo">🌊</div>
+                <div>
+                    <h1>Sistem Jurnal & Pengeluaran Keuangan Mahad</h1>
+                    <p>Ekstraksi LPJ Excel ke Jurnal Buku Besar & Monitoring Arus Kas Harian</p>
+                </div>
+            </div>
+            <div class="badge-bright">Plus Jakarta Sans • v2.1</div>
+        </div>
+
+        <!-- Segmented Mode Selector -->
+        <div class="nav-dock">
+            <div class="nav-pill active" id="modeBtn1" onclick="switchMode(1)">
+                <div class="icon">📊</div>
+                <div>Fitur 1: Ekstraksi LPJ Excel ke Jurnal</div>
+            </div>
+            <div class="nav-pill" id="modeBtn2" onclick="switchMode(2)">
+                <div class="icon">📋</div>
+                <div>Fitur 2: Rekap Arus Kas Harian</div>
+            </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- FITUR 1: EKSTRAKTOR LPJ EXCEL KE JURNAL                                   -->
+        <!-- ========================================================================= -->
+        <div id="feature1Container">
+            <div class="card">
+                <div class="dropzone-box">
+                    <input type="file" id="fileInput" class="file-hidden-input" accept=".xlsx">
+                    <div class="dropzone-icon">📁</div>
+                    <div class="dropzone-title" id="dropzoneLabel">Klik atau Tarik File Excel (.xlsx) ke Sini</div>
+                    <div class="dropzone-sub">Sistem otomatis mendeteksi sheet, kolom uraian, unit, harga, dan kode COA</div>
+                </div>
+                <div style="text-align: right; margin-top: 10px;">
+                    <button type="button" class="btn btn-outline" id="btnResetF1">🔄 Reset File</button>
+                </div>
+            </div>
+
+            <!-- Parameter Form -->
+            <div class="card" id="formSectionF1" style="display: none;">
+                <label style="color: var(--lagoon-600); font-weight: 800; font-size: 11.5px;">2. PARAMETER KODE BIDANG & PIC:</label>
+                <div class="grid">
+                    <div class="form-group">
+                        <label>Pilih Sheet:</label>
+                        <select id="sheetSelect"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Kode & Bidang:</label>
+                        <div class="picker-btn" onclick="openBidangModal()">
+                            <span id="labelBidangSelected">B14 - Kesantrian</span>
+                            <span style="color: var(--lagoon-600);">🔍 Ganti</span>
+                        </div>
+                        <input type="hidden" id="kodeBidangInput" value="B14">
+                        <input type="hidden" id="bidangInput" value="Kesantrian">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nama PIC:</label>
+                        <input type="text" id="namaPicInput" list="picSuggestions" placeholder="Ketik / pilih nama PIC..." autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Status A/N:</label>
+                        <select id="anSelect">
+                            <option value="na" selected>na</option>
+                            <option value="a">a</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Metode Kas (KK):</label>
+                        <select id="kkSelect">
+                            <option value="1" selected>1 (Tunai)</option>
+                            <option value="2">2 (Bank / Transfer)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 14px;">
+                    <label>Keterangan Tambahan Uraian (Buku Besar):</label>
+                    <input type="text" id="keteranganInput" placeholder="Contoh: Belanja Operasional Kesantrian Juli 2026">
+                </div>
+            </div>
+
+            <!-- Hasil Fitur 1 -->
+            <div class="card" id="tableSectionF1" style="display: none;">
+                <div class="sub-tab-nav">
+                    <button type="button" class="sub-tab-btn active" id="subTabBB" onclick="switchSubTab('bukuBesar')">Buku Besar</button>
+                    <button type="button" class="sub-tab-btn" id="subTabBP" onclick="switchSubTab('bukuPembantu')">Buku Pembantu (Rincian)</button>
+                </div>
+
+                <div class="toolbar" style="margin-bottom: 12px;">
+                    <span id="statusTextF1" style="font-weight: 700; color: var(--slate-600);">0 baris</span>
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" class="btn btn-primary" id="btnCopyF1">📋 Salin ke Clipboard (TSV)</button>
+                        <button type="button" class="btn btn-blue" onclick="transferDataToFeature2()">➡️ Kirim ke Rekap Kas Harian</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead id="tableHeadF1"></thead>
+                        <tbody id="tableBodyF1"></tbody>
+                        <tfoot id="tableFootF1"></tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- FITUR 2: REKAP ARUS KAS HARIAN                                            -->
+        <!-- ========================================================================= -->
+        <div id="feature2Container" style="display: none;">
+            <div class="card">
+                <div class="toolbar" style="margin-bottom: 10px;">
+                    <div>
+                        <label style="color: var(--lagoon-600); font-weight: 800; font-size: 11.5px;">INPUT DATA TRANSAKSI DARI EXCEL / BUKU BESAR:</label>
+                        <p style="margin: 3px 0 0 0; color: var(--slate-500); font-size: 11.5px;">
+                            Paste langsung baris tabel dari spreadsheet. Mendukung parsing angka bertanda minus <code style="font-family:'JetBrains Mono'">(100.000)</code> atau <code style="font-family:'JetBrains Mono'">-100.000</code>.
+                        </p>
+                    </div>
+                </div>
+                <textarea id="rawInputF2" rows="6" placeholder="Paste data tabel buku besar di sini (Ctrl + V)..."></textarea>
+                
+                <div class="toolbar" style="margin-top: 14px;">
+                    <button type="button" class="btn btn-primary" onclick="processFeature2Data()">⚡ Proses & Tampilkan Rekap</button>
+                    <button type="button" class="btn btn-blue" onclick="copyFeature2Data()">📋 Salin Semua Tabel Rekap (TSV)</button>
+                </div>
+            </div>
+
+            <!-- Area Tampilan Data Rekap Kas -->
+            <div id="dailyDisplayContainer"></div>
+        </div>
+    </div>
+
+    <!-- ======================== MODAL SEARCH KODE & BIDANG ======================== -->
+    <div class="modal-overlay" id="bidangModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2>Pilih Kode & Nama Bidang</h2>
+                <button type="button" class="btn btn-outline" onclick="closeBidangModal()">✕</button>
+            </div>
+            <input type="text" id="searchBidangInput" placeholder="Ketik kode atau nama bidang..." style="width: 100%;">
+            <div class="modal-list" id="bidangListContainer"></div>
+        </div>
+    </div>
+
+    <!-- ======================== MODAL PILIH COA ======================== -->
+    <div class="modal-overlay" id="coaModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2>Pilih Akun COA</h2>
+                <button type="button" class="btn btn-outline" onclick="closeCoaModal()">✕</button>
+            </div>
+            <input type="text" id="searchCoaInput" placeholder="Ketik kode atau nama akun COA..." style="width: 100%;">
+            <div class="modal-list" id="coaListContainer"></div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">Data berhasil diproses!</div>
+
+    <script>
+        /* ======================== MASTER DATA ======================== */
+        const MASTER_BIDANG = [
+            { code: "B11", name: "Mukafaah" },
+            { code: "B12", name: "Sekretariat" },
+            { code: "B13", name: "Pendidikan" },
+            { code: "B14", name: "Kesantrian" },
+            { code: "B15", name: "Daksos" },
+            { code: "B16", name: "Konsumsi" },
+            { code: "B17", name: "Bidang Keuangan" },
+            { code: "B18", name: "Bidang Rumah tangga" },
+            { code: "B19", name: "Bidang Usaha" },
+            { code: "B110", name: "Bea Marhalah ( RA,MI,MTs,MA )" },
+            { code: "B111", name: "Biaya Tagihan Listrik" },
+            { code: "B112", name: "Biaya Telepon dan Internet" },
+            { code: "B113", name: "Biaya Operasional Klinik" },
+            { code: "B114", name: "Bea Buku dan Ujian" },
+            { code: "B115", name: "Uang Muka/ Kas Bon Operasional Mahad" },
+            { code: "B116", name: "Bea Lain-lain ( Uang saku, Titipan,Dsb )" },
+            { code: "B117", name: "Laundry" },
+            { code: "B118", name: "Bidang Khidmah" },
+            { code: "B119", name: "Kesantrian Putri" },
+            { code: "B120", name: "Multimedia" },
+            { code: "B21", name: "Pelaksanaan Dana Amanah Pembangunan" },
+            { code: "B29", name: "Bea tidak rutin lainnya ( Uang saku )" },
+            { code: "B23", name: "Piutang Guru & Karyawan" },
+            { code: "B24", name: "Kas bon ( tidak rutin )" }
+        ];
+
+        const MASTER_COA = [
+            { code: "111010201", name: "Kas Kecil Mahad Ibnu Taimiyah" },
+            { code: "111010202", name: "Kas Besar Mahad Ibnu Taimiyah" },
+            { code: "111020201", name: "BSI" },
+            { code: "111020202", name: "Muamalat" },
+            { code: "112030102", name: "Piutang Pegawai" },
+            { code: "113020102", name: "Uang Muka Markaz" },
+            { code: "213010108", name: "Dana Titipan Tabungan Santri" },
+            { code: "213010199", name: "Utang Jangka Pendek Lainnya" },
+            { code: "421010101", name: "Pendapatan IWS (Infaq Wali-Santri/Murid)" },
+            { code: "521010101", name: "Beban Mukafaah Markaz" },
+            { code: "521010102", name: "Beban Alawah Markaz" },
+            { code: "521010104", name: "Beban Pemeliharaan Markaz" },
+            { code: "521010105", name: "Beban ATK Markaz" },
+            { code: "521010106", name: "Beban Perlengkapan Markaz" },
+            { code: "521010107", name: "Beban Listrik-Air-Gas Markaz" },
+            { code: "521010108", name: "Beban Internet-IT Markaz" },
+            { code: "521010109", name: "Beban Transportasi-Akomodasi Markaz" },
+            { code: "521010110", name: "Beban Operasional Markaz" },
+            { code: "521010111", name: "Beban Konsumsi Markaz" },
+            { code: "521010113", name: "Beban Belanja Dapur Markaz" },
+            { code: "521010114", name: "Beban Iuran-Pajak-Surat-Daftar Markaz" },
+            { code: "521010115", name: "Beban Telepon-HP Markaz" },
+            { code: "521010117", name: "Beban Sewa Markaz" },
+            { code: "521010120", name: "Beban Percetakan Markaz" },
+            { code: "521010121", name: "Beban Jamuan Tamu Markaz" },
+            { code: "521010123", name: "Beban Iklan dan Promosi Markaz" },
+            { code: "521010124", name: "Beban Pengiriman-Ekpedisi Markaz" },
+            { code: "521010126", name: "Beban Kegiatan-Program" },
+            { code: "522010104", name: "Beban Tunjangan Kesehatan" },
+            { code: "522010120", name: "Beban Bantuan-Sumbangan-Santunan" },
+            { code: "522010123", name: "Beban Tenaga Ahli & Perizinan, Jasa" },
+            { code: "522010124", name: "Beban Rapat" },
+            { code: "621010101", name: "Beban Administrasi Bank" },
+            { code: "621010102", name: "Beban Lainnya" }
+        ];
+
+        const DEFAULT_PICS = [
+            "Markum", "Aditya Wiguna Pamungkas", "Didik Suyadi", "Akhmad Atib", 
+            "Falih", "Suparno Abu jundi", "Hendri Fahrizal", "Koernia D", 
+            "Agus Purwanto", "Deno Sofyan", "Syukri Tasling", "Dedi Mulyadi", 
+            "Johan Arifin", "Syafiq Abrori", "Ruslan Nurhadi", "Suhendi", 
+            "Aryanto", "Saepul", "Komariah", "Hidayati", "Amin Chusaini", 
+            "Rozani", "Syalsa Dinta", "Ida Farida", "Nanin Sudiar"
+        ];
+
+        let journalDataF1 = [];
+        let workbookExcelF1 = null;
+        let currentSubTabF1 = 'bukuBesar';
+        let activeGroupIndexToEdit = -1;
+        let processedDailyDataF2 = {};
+
+        /* ======================== FORMAT & CLEANING NUMBERS (HANDLE MINUS) ======================== */
+        function normalizeCellText(val) {
+            if (val === null || val === undefined) return '';
+            return String(val).replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
+        }
+
+        function cleanNumber(str) {
+            if (!str && str !== 0) return 0;
+            let s = str.toString().trim();
+            if (!s) return 0;
+
+            let isNeg = false;
+            if (s.startsWith('(') && s.endsWith(')')) {
+                isNeg = true;
+                s = s.slice(1, -1).trim();
+            } else if (s.startsWith('-')) {
+                isNeg = true;
+                s = s.substring(1).trim();
+            }
+
+            s = s.replace(/Rp/gi, '').replace(/\s+/g, '').replace(/\./g, '').replace(/,/g, '.').trim();
+            let val = parseFloat(s);
+            if (isNaN(val)) return 0;
+            return isNeg ? -Math.abs(val) : val;
+        }
+
+        function formatRupiah(num, withPrefix = false) {
+            if (num === null || num === undefined || isNaN(num) || num === 0) return "";
+            let isNeg = num < 0;
+            let absVal = Math.round(Math.abs(num)).toLocaleString('id-ID');
+            let formatted = isNeg ? `-${absVal}` : absVal;
+            return withPrefix ? (isNeg ? `-Rp ${absVal}` : `Rp ${absVal}`) : formatted;
+        }
+
+        function parseTSV(text) {
+            if (!text) return [];
+            let rows = [];
+            let currentRow = [];
+            let currentCell = '';
+            let inQuotes = false;
+            let cleanText = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+            for (let i = 0; i < cleanText.length; i++) {
+                let char = cleanText[i];
+                let nextChar = cleanText[i + 1];
+
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        currentCell += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === '\t' && !inQuotes) {
+                    currentRow.push(normalizeCellText(currentCell));
+                    currentCell = '';
+                } else if (char === '\n' && !inQuotes) {
+                    currentRow.push(normalizeCellText(currentCell));
+                    if (currentRow.some(c => c.length > 0)) {
+                        rows.push(currentRow);
+                    }
+                    currentRow = [];
+                    currentCell = '';
+                } else {
+                    currentCell += char;
+                }
+            }
+
+            if (currentCell.length > 0 || currentRow.length > 0) {
+                currentRow.push(normalizeCellText(currentCell));
+                if (currentRow.some(c => c.length > 0)) {
+                    rows.push(currentRow);
+                }
+            }
+
+            return rows;
+        }
+
+        function initPicSuggestions() {
+            let stored = localStorage.getItem('pic_suggestions');
+            let pics = stored ? JSON.parse(stored) : DEFAULT_PICS;
+            const dl = document.getElementById('picSuggestions');
+            dl.innerHTML = '';
+            pics.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p;
+                dl.appendChild(opt);
+            });
+        }
+        initPicSuggestions();
+
+        function saveNewPicSuggestion(name) {
+            if (!name || name.trim().length < 2) return;
+            name = name.trim();
+            let stored = localStorage.getItem('pic_suggestions');
+            let pics = stored ? JSON.parse(stored) : DEFAULT_PICS;
+            if (!pics.includes(name)) {
+                pics.push(name);
+                pics.sort();
+                localStorage.setItem('pic_suggestions', JSON.stringify(pics));
+                initPicSuggestions();
+            }
+        }
+
+        function switchMode(modeNumber) {
+            document.getElementById('modeBtn1').classList.toggle('active', modeNumber === 1);
+            document.getElementById('modeBtn2').classList.toggle('active', modeNumber === 2);
+            document.getElementById('feature1Container').style.display = modeNumber === 1 ? 'block' : 'none';
+            document.getElementById('feature2Container').style.display = modeNumber === 2 ? 'block' : 'none';
+        }
+
+        function getTodayDate() {
+            const today = new Date();
+            const d = String(today.getDate()).padStart(2, '0');
+            const m = String(today.getMonth() + 1).padStart(2, '0');
+            const y = String(today.getFullYear()).slice(-2);
+            return `${d}/${m}/${y}`;
+        }
+
+        function formatUraianBukuBesar(namaAkun, keteranganTambahan) {
+            namaAkun = normalizeCellText(namaAkun);
+            keteranganTambahan = normalizeCellText(keteranganTambahan);
+            if (!keteranganTambahan) return namaAkun;
+            if (keteranganTambahan.startsWith(':')) keteranganTambahan = keteranganTambahan.substring(1).trim();
+            return `${namaAkun} : ${keteranganTambahan}`;
+        }
+
+        /* ======================== POP-UP KODE & BIDANG ======================== */
+        const bidangModal = document.getElementById('bidangModal');
+        const searchBidangInput = document.getElementById('searchBidangInput');
+        const bidangListContainer = document.getElementById('bidangListContainer');
+
+        function openBidangModal() {
+            searchBidangInput.value = '';
+            renderBidangList('');
+            bidangModal.style.display = 'flex';
+            searchBidangInput.focus();
+        }
+        function closeBidangModal() { bidangModal.style.display = 'none'; }
+
+        searchBidangInput.addEventListener('input', (e) => renderBidangList(e.target.value));
+
+        function renderBidangList(query) {
+            bidangListContainer.innerHTML = '';
+            const q = query.toLowerCase().trim();
+            const filtered = MASTER_BIDANG.filter(b => b.code.toLowerCase().includes(q) || b.name.toLowerCase().includes(q));
+
+            filtered.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'modal-item';
+                div.innerHTML = `<span>${item.name}</span><span class="modal-item-code">${item.code}</span>`;
+                div.onclick = () => selectBidang(item);
+                bidangListContainer.appendChild(div);
+            });
+        }
+
+        function selectBidang(item) {
+            document.getElementById('kodeBidangInput').value = item.code;
+            document.getElementById('bidangInput').value = item.name;
+            document.getElementById('labelBidangSelected').textContent = `${item.code} - ${item.name}`;
+            closeBidangModal();
+            renderTableF1();
+        }
+
+        /* ======================== POP-UP COA ======================== */
+        const coaModal = document.getElementById('coaModal');
+        const searchCoaInput = document.getElementById('searchCoaInput');
+        const coaListContainer = document.getElementById('coaListContainer');
+
+        function openCoaModal(idx) {
+            activeGroupIndexToEdit = idx;
+            searchCoaInput.value = '';
+            renderCoaList('');
+            coaModal.style.display = 'flex';
+            searchCoaInput.focus();
+        }
+        function closeCoaModal() { coaModal.style.display = 'none'; activeGroupIndexToEdit = -1; }
+
+        searchCoaInput.addEventListener('input', (e) => renderCoaList(e.target.value));
+
+        function renderCoaList(q) {
+            coaListContainer.innerHTML = '';
+            const query = q.toLowerCase().trim();
+            const filtered = MASTER_COA.filter(c => c.code.includes(query) || c.name.toLowerCase().includes(query));
+            filtered.forEach(it => {
+                const div = document.createElement('div');
+                div.className = 'modal-item';
+                div.innerHTML = `<span>${it.name}</span><span class="modal-item-code">${it.code}</span>`;
+                div.onclick = () => {
+                    if (activeGroupIndexToEdit >= 0 && journalDataF1[activeGroupIndexToEdit]) {
+                        journalDataF1[activeGroupIndexToEdit].kode = it.code;
+                        journalDataF1[activeGroupIndexToEdit].keterangan = it.name;
+                        renderTableF1();
+                    }
+                    closeCoaModal();
+                };
+                coaListContainer.appendChild(div);
+            });
+        }
+
+        /* ======================== FITUR 1 ======================== */
+        const fileInput = document.getElementById('fileInput');
+        const dropzoneLabel = document.getElementById('dropzoneLabel');
+        const sheetSelect = document.getElementById('sheetSelect');
+        const namaPicInput = document.getElementById('namaPicInput');
+        const anSelect = document.getElementById('anSelect');
+        const kkSelect = document.getElementById('kkSelect');
+        const keteranganInput = document.getElementById('keteranganInput');
+
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            dropzoneLabel.innerHTML = `📄 File Aktif: <strong>${file.name}</strong>`;
+
+            const buffer = await file.arrayBuffer();
+            workbookExcelF1 = new ExcelJS.Workbook();
+            await workbookExcelF1.xlsx.load(buffer);
+
+            sheetSelect.innerHTML = '';
+            workbookExcelF1.eachSheet((worksheet, sheetId) => {
+                const opt = document.createElement('option');
+                opt.value = worksheet.name;
+                opt.textContent = `${sheetId}. ${worksheet.name}`;
+                sheetSelect.appendChild(opt);
+            });
+
+            document.getElementById('formSectionF1').style.display = 'block';
+            document.getElementById('tableSectionF1').style.display = 'block';
+            processSheetF1();
+        });
+
+        sheetSelect.addEventListener('change', processSheetF1);
+        [namaPicInput, anSelect, kkSelect, keteranganInput].forEach(el => {
+            el.addEventListener('input', () => {
+                if (el === namaPicInput) saveNewPicSuggestion(el.value);
+                renderTableF1();
+            });
+        });
+
+        document.getElementById('btnResetF1').addEventListener('click', () => {
+            fileInput.value = '';
+            dropzoneLabel.textContent = 'Klik atau Tarik File Excel (.xlsx) ke Sini';
+            workbookExcelF1 = null;
+            journalDataF1 = [];
+            document.getElementById('formSectionF1').style.display = 'none';
+            document.getElementById('tableSectionF1').style.display = 'none';
+        });
+
+        function isGreen(cell) {
+            if (!cell || !cell.fill) return false;
+            const fill = cell.fill;
+            let argb = fill.fgColor?.argb || fill.bgColor?.argb;
+            if (argb) {
+                const hex = String(argb).length === 8 ? String(argb).substring(2) : String(argb);
+                const r = parseInt(hex.substring(0,2), 16), g = parseInt(hex.substring(2,4), 16), b = parseInt(hex.substring(4,6), 16);
+                if (g > 60 && g >= r * 0.85 && g >= b * 0.85 && (g > r || g > b)) return true;
+            }
+            return false;
+        }
+
+        function getCellText(cell) {
+            if (!cell || cell.value === null || cell.value === undefined) return '';
+            let val = '';
+            if (typeof cell.value === 'object') {
+                val = cell.value.result || cell.value.text || (cell.value.richText ? cell.value.richText.map(t => t.text).join('') : '');
+            } else {
+                val = String(cell.value);
+            }
+            return normalizeCellText(val);
+        }
+
+        function processSheetF1() {
+            if (!workbookExcelF1) return;
+            const worksheet = workbookExcelF1.getWorksheet(sheetSelect.value);
+            if (!worksheet) return;
+
+            let colMap = { uraian: -1, unit: -1, satuan: -1, sebesar: -1, jumlah: -1 };
+            let headerRowNumber = -1;
+
+            worksheet.eachRow((row, rowNumber) => {
+                if (rowNumber > 30 || headerRowNumber !== -1) return;
+                let texts = [];
+                row.eachCell(c => texts.push(getCellText(c).toUpperCase()));
+                let full = texts.join(' ');
+                if ((full.includes('URAIAN') || full.includes('KETERANGAN')) && (full.includes('JUMLAH') || full.includes('SEBESAR') || full.includes('UNIT'))) {
+                    headerRowNumber = rowNumber;
+                    row.eachCell((c, colNumber) => {
+                        let t = getCellText(c).toUpperCase();
+                        if (t.includes('URAIAN') || t.includes('NAMA BARANG')) colMap.uraian = colNumber;
+                        else if (t === 'UNIT' || t === 'QTY' || t.includes('VOL')) colMap.unit = colNumber;
+                        else if (t === 'SATUAN' || t === 'SAT') colMap.satuan = colNumber;
+                        else if (t === 'SEBESAR' || t.includes('HARGA')) colMap.sebesar = colNumber;
+                        else if (t === 'JUMLAH' || t === 'TOTAL') colMap.jumlah = colNumber;
+                    });
+                }
+            });
+
+            if (colMap.uraian === -1) colMap.uraian = 5;
+            if (colMap.unit === -1) colMap.unit = 8;
+            if (colMap.satuan === -1) colMap.satuan = 9;
+            if (colMap.sebesar === -1) colMap.sebesar = 10;
+            if (colMap.jumlah === -1) colMap.jumlah = 11;
+
+            const parsed = [];
+            let currentGroup = null;
+            let finished = false;
+
+            worksheet.eachRow((row, rowNumber) => {
+                if (finished || (headerRowNumber !== -1 && rowNumber <= headerRowNumber)) return;
+                let rowCells = [], hasGreenCell = false;
+
+                row.eachCell({ includeEmpty: true }, (c, colNumber) => {
+                    let txt = getCellText(c), num = cleanNumber(txt), grn = isGreen(c);
+                    rowCells.push({ col: colNumber, text: txt, num, grn });
+                    if (grn) hasGreenCell = true;
+                });
+
+                let fullRowText = rowCells.map(c => c.text).filter(t => t.length > 0).join(' ').trim();
+                if (!fullRowText) return;
+                if (/JUMLAH\s+PENGELUARAN/i.test(fullRowText)) { finished = true; return; }
+
+                let coaMatched = MASTER_COA.find(c => fullRowText.includes(c.code)) || MASTER_COA.find(c => fullRowText.toLowerCase().includes(c.name.toLowerCase()));
+                let isHeader = hasGreenCell || (coaMatched && (fullRowText.includes('Beban') || /^\d{1,2}\s+52/i.test(fullRowText)));
+
+                if (isHeader) {
+                    let name = coaMatched ? coaMatched.name : fullRowText;
+                    let code = coaMatched ? coaMatched.code : '';
+                    currentGroup = { kode: code, keterangan: name, items: [] };
+                    parsed.push(currentGroup);
+                    return;
+                }
+
+                if (currentGroup) {
+                    let uraian = colMap.uraian !== -1 ? getCellText(row.getCell(colMap.uraian)) : '';
+                    if (!uraian) {
+                        let cand = rowCells.find(c => isNaN(cleanNumber(c.text)) && c.text.length > 2);
+                        if (cand) uraian = cand.text;
+                    }
+                    if (!uraian) return;
+
+                    let rawUnit = colMap.unit !== -1 ? cleanNumber(getCellText(row.getCell(colMap.unit))) : 1;
+                    let unit = rawUnit === 0 ? 1 : rawUnit;
+                    let satuan = colMap.satuan !== -1 ? getCellText(row.getCell(colMap.satuan)) : '';
+                    let unitPrice = colMap.sebesar !== -1 ? cleanNumber(getCellText(row.getCell(colMap.sebesar))) : 0;
+                    let totalNominal = colMap.jumlah !== -1 ? cleanNumber(getCellText(row.getCell(colMap.jumlah))) : 0;
+
+                    if (unitPrice !== 0 && totalNominal === 0) totalNominal = unit * unitPrice;
+                    else if (unitPrice === 0 && totalNominal !== 0) unitPrice = totalNominal / unit;
+
+                    if (totalNominal !== 0 || unitPrice !== 0) {
+                        currentGroup.items.push({ uraian: normalizeCellText(uraian), unit, satuan: normalizeCellText(satuan), harga: unitPrice, jumlah: totalNominal });
+                    }
+                }
+            });
+
+            journalDataF1 = parsed;
+            renderTableF1();
+        }
+
+        function switchSubTab(tab) {
+            currentSubTabF1 = tab;
+            document.getElementById('subTabBB').classList.toggle('active', tab === 'bukuBesar');
+            document.getElementById('subTabBP').classList.toggle('active', tab === 'bukuPembantu');
+            renderTableF1();
+        }
+
+        function renderTableF1() {
+            const thead = document.getElementById('tableHeadF1');
+            const tbody = document.getElementById('tableBodyF1');
+            const tfoot = document.getElementById('tableFootF1');
+            thead.innerHTML = ''; tbody.innerHTML = ''; tfoot.innerHTML = '';
+
+            const today = getTodayDate();
+            const kodeBidang = normalizeCellText(document.getElementById('kodeBidangInput').value);
+            const bidang = normalizeCellText(document.getElementById('bidangInput').value);
+            const pic = normalizeCellText(namaPicInput.value);
+            const an = normalizeCellText(anSelect.value);
+            const kk = normalizeCellText(kkSelect.value);
+            const ket = normalizeCellText(keteranganInput.value);
+
+            const validGroups = journalDataF1.filter(g => g.items && g.items.length > 0);
+
+            if (currentSubTabF1 === 'bukuBesar') {
+                thead.innerHTML = `
+                    <tr>
+                        <th width="8%">TANGGAL</th><th width="6%">KODE</th><th width="12%">BIDANG</th><th width="9%">KODE COA</th>
+                        <th width="16%">NAMA JENJANG</th><th>URAIAN</th><th width="12%">NAMA</th><th class="text-center" width="4%">A/N</th>
+                        <th class="text-center" width="4%">KP</th><th class="text-right" width="8%">DEBET</th><th class="text-center" width="4%">KK</th>
+                        <th class="text-right" width="10%">KREDIT</th>
+                    </tr>
+                `;
+                document.getElementById('statusTextF1').textContent = `${validGroups.length} akun ringkasan (Buku Besar)`;
+
+                let total = 0;
+                validGroups.forEach((g, idx) => {
+                    let gTotal = g.items.reduce((acc, i) => acc + i.jumlah, 0);
+                    total += gTotal;
+                    let uraian = formatUraianBukuBesar(g.keterangan, ket);
+                    let isMinus = gTotal < 0;
+
+                    let tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="num-font">${today}</td><td>${kodeBidang}</td><td>${bidang}</td>
+                        <td class="num-font" style="font-weight:700; color:var(--lagoon-600); cursor:pointer;" onclick="openCoaModal(${idx})">${g.kode || 'PILIH COA'}</td>
+                        <td>${g.keterangan}</td><td>${uraian}</td><td>${pic}</td>
+                        <td class="text-center">${an}</td><td></td><td></td>
+                        <td class="text-center num-font">${kk}</td>
+                        <td class="text-right font-bold num-font ${isMinus ? 'text-red' : ''}">${formatRupiah(gTotal)}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                let totalColor = total < 0 ? 'var(--coral-rose)' : 'var(--lagoon-600)';
+                tfoot.innerHTML = `<tr><td colspan="11" class="text-right">TOTAL KREDIT:</td><td class="text-right font-bold num-font" style="color:${totalColor}; font-size:12.5px;">${formatRupiah(total)}</td></tr>`;
+            } else {
+                thead.innerHTML = `
+                    <tr>
+                        <th width="8%">TANGGAL</th><th width="6%">KODE</th><th width="12%">BIDANG</th><th width="9%">KODE COA</th>
+                        <th width="15%">NAMA JENJANG</th><th>URAIAN</th><th width="12%">NAMA</th><th class="text-center" width="4%">Status</th>
+                        <th class="text-center" width="5%">UNIT</th><th width="6%">SATUAN</th><th class="text-right" width="10%">HARGA SATUAN</th>
+                        <th class="text-right" width="10%">JUMLAH (TOTAL)</th>
+                    </tr>
+                `;
+
+                let allItems = [];
+                validGroups.forEach((g, idx) => g.items.forEach(it => allItems.push({ ...it, groupIndex: idx, kode: g.kode, keterangan: g.keterangan })));
+                document.getElementById('statusTextF1').textContent = `${allItems.length} baris rincian (Buku Pembantu)`;
+
+                let total = 0;
+                allItems.forEach(it => {
+                    total += it.jumlah;
+                    let isMinus = it.jumlah < 0;
+                    let tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="num-font">${today}</td><td>${kodeBidang}</td><td>${bidang}</td>
+                        <td class="num-font" style="font-weight:700; color:var(--lagoon-600); cursor:pointer;" onclick="openCoaModal(${it.groupIndex})">${it.kode || 'PILIH COA'}</td>
+                        <td>${it.keterangan}</td><td>${it.uraian}</td><td>${pic}</td>
+                        <td class="text-center">${an}</td><td class="text-center num-font">${it.unit}</td>
+                        <td>${it.satuan}</td><td class="text-right num-font ${it.harga < 0 ? 'text-red' : ''}">${formatRupiah(it.harga)}</td>
+                        <td class="text-right font-bold num-font ${isMinus ? 'text-red' : ''}">${formatRupiah(it.jumlah)}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                let totalColor = total < 0 ? 'var(--coral-rose)' : 'var(--lagoon-600)';
+                tfoot.innerHTML = `<tr><td colspan="11" class="text-right">TOTAL PENGELUARAN:</td><td class="text-right font-bold num-font" style="color:${totalColor}; font-size:12.5px;">${formatRupiah(total)}</td></tr>`;
+            }
+        }
+
+        document.getElementById('btnCopyF1').addEventListener('click', () => {
+            const today = getTodayDate();
+            const kodeBidang = normalizeCellText(document.getElementById('kodeBidangInput').value);
+            const bidang = normalizeCellText(document.getElementById('bidangInput').value);
+            const pic = normalizeCellText(namaPicInput.value);
+            const an = normalizeCellText(anSelect.value);
+            const kk = normalizeCellText(kkSelect.value);
+            const ket = normalizeCellText(keteranganInput.value);
+
+            const validGroups = journalDataF1.filter(g => g.items && g.items.length > 0);
+            if (validGroups.length === 0) return alert("Tidak ada data untuk disalin!");
+
+            let lines = [];
+            if (currentSubTabF1 === 'bukuBesar') {
+                validGroups.forEach(g => {
+                    let gTotal = g.items.reduce((acc, i) => acc + i.jumlah, 0);
+                    let uraian = formatUraianBukuBesar(g.keterangan, ket);
+                    lines.push([today, kodeBidang, bidang, normalizeCellText(g.kode), normalizeCellText(g.keterangan), uraian, pic, an, '', '', kk, formatRupiah(gTotal)].join('\t'));
+                });
+            } else {
+                validGroups.forEach(g => {
+                    g.items.forEach(it => {
+                        lines.push([today, kodeBidang, bidang, normalizeCellText(g.kode), normalizeCellText(g.keterangan), normalizeCellText(it.uraian), pic, an, it.unit, normalizeCellText(it.satuan), formatRupiah(it.harga), formatRupiah(it.jumlah)].join('\t'));
+                    });
+                });
+            }
+
+            navigator.clipboard.writeText(lines.join('\n')).then(() => {
+                showToast("Data jurnal berhasil disalin ke Clipboard!");
+            });
+        });
+
+        function transferDataToFeature2() {
+            const today = getTodayDate();
+            const kodeBidang = normalizeCellText(document.getElementById('kodeBidangInput').value);
+            const bidang = normalizeCellText(document.getElementById('bidangInput').value);
+            const pic = normalizeCellText(namaPicInput.value);
+            const an = normalizeCellText(anSelect.value);
+            const kk = normalizeCellText(kkSelect.value);
+            const ket = normalizeCellText(keteranganInput.value);
+
+            const validGroups = journalDataF1.filter(g => g.items && g.items.length > 0);
+            if (validGroups.length === 0) return alert("Tidak ada data untuk ditransfer!");
+
+            let tsv = validGroups.map(g => {
+                let gTotal = g.items.reduce((acc, i) => acc + i.jumlah, 0);
+                let uraian = formatUraianBukuBesar(g.keterangan, ket);
+                return `${today}\t${kodeBidang}\t${bidang}\t${uraian}\t${pic}\t${an}\t\t${gTotal}\t${gTotal}\t${kk}`;
+            }).join('\n');
+
+            document.getElementById('rawInputF2').value = tsv;
+            switchMode(2);
+            processFeature2Data();
+            showToast("Data berhasil dipindahkan ke Rekap Kas Harian!");
+        }
+
+        /* ======================== FITUR 2 ======================== */
+        function processFeature2Data() {
+            const raw = document.getElementById('rawInputF2').value.trim();
+            if (!raw) return alert("Silakan paste data transaksi terlebih dahulu!");
+
+            const parsedRows = parseTSV(raw);
+            let dailyRaw = {};
+
+            parsedRows.forEach(cols => {
+                if (cols.length < 4) return;
+                let col0 = normalizeCellText(cols[0]);
+                if (col0.toLowerCase().includes('tanggal') || col0.toLowerCase().includes('buku') || col0.toLowerCase().includes('saldo')) return;
+
+                let tgl = col0;
+                let kode = cols[1] ? normalizeCellText(cols[1]) : '';
+                let jenisBiaya = cols[2] ? normalizeCellText(cols[2]) : '';
+                let uraian = cols[5] ? normalizeCellText(cols[5]) : (cols[3] ? normalizeCellText(cols[3]) : '');
+                let nama = cols[6] ? normalizeCellText(cols[6]) : (cols[4] ? normalizeCellText(cols[4]) : '');
+                let an = cols[7] ? normalizeCellText(cols[7]) : (cols[5] ? normalizeCellText(cols[5]) : 'na');
+                
+                let debet = cleanNumber(cols[9]);
+                let kredit = cleanNumber(cols[11] || cols[7] || cols[6] || 0);
+
+                if (debet > 0 && kredit === 0) return;
+                if (uraian.toLowerCase().includes('tambahan kas') || uraian.toLowerCase().includes('saldo akhir')) return;
+
+                let tipeKas = '1';
+                if (cols.length >= 11 && (cols[10]?.trim() === '1' || cols[10]?.trim() === '2')) {
+                    tipeKas = cols[10].trim();
+                } else if (cols[cols.length - 1]?.trim() === '1' || cols[cols.length - 1]?.trim() === '2') {
+                    tipeKas = cols[cols.length - 1].trim();
+                } else {
+                    let found = cols.slice(6).find(c => c.trim() === '1' || c.trim() === '2');
+                    if (found) tipeKas = found.trim();
+                }
+
+                let isBank = (tipeKas === '2');
+                let isPelunasan = kredit < 0 || uraian.toLowerCase().includes('pelunasan');
+
+                if (!dailyRaw[tgl]) dailyRaw[tgl] = [];
+                dailyRaw[tgl].push({
+                    tgl, kode, jenisBiaya, uraian, nama, an, isBank,
+                    pelunasan: isPelunasan ? Math.abs(kredit) : 0,
+                    kredit: !isPelunasan ? kredit : 0
+                });
+            });
+
+            let dailyConsolidated = {};
+            for (const [tgl, items] of Object.entries(dailyRaw)) {
+                dailyConsolidated[tgl] = [];
+                let groupMap = {};
+
+                items.forEach(it => {
+                    let hasColon = it.uraian.includes(':');
+                    let isConsolidable = !it.pelunasan && hasColon;
+
+                    if (isConsolidable) {
+                        let parts = it.uraian.split(':');
+                        let ketBersih = parts.slice(1).join(':').trim();
+                        let groupKey = `${it.kode}_${it.nama.toLowerCase()}_${it.isBank}_${ketBersih.toLowerCase()}`;
+
+                        if (!groupMap[groupKey]) {
+                            groupMap[groupKey] = { 
+                                ...it, 
+                                uraian: ketBersih 
+                            };
+                            dailyConsolidated[tgl].push(groupMap[groupKey]);
+                        } else {
+                            groupMap[groupKey].kredit += it.kredit;
+                        }
+                    } else {
+                        dailyConsolidated[tgl].push(it);
+                    }
+                });
+            }
+
+            processedDailyDataF2 = dailyConsolidated;
+            renderFeature2Display();
+        }
+
+        function copyFeature2Data() {
+            if (!processedDailyDataF2 || Object.keys(processedDailyDataF2).length === 0) {
+                return alert("Tidak ada data untuk disalin! Silakan proses data terlebih dahulu.");
+            }
+
+            let lines = [];
+            for (const [tgl, items] of Object.entries(processedDailyDataF2)) {
+                items.forEach(it => {
+                    let isPelunasan = it.pelunasan > 0;
+                    let kodeKas = it.isBank ? '2' : '1';
+                    
+                    let pelunasanStr = isPelunasan ? `-${formatRupiah(it.pelunasan)}` : '';
+                    let kreditStr = it.kredit !== 0 ? formatRupiah(it.kredit) : '';
+                    let totalStr = isPelunasan ? `-${formatRupiah(it.pelunasan)}` : formatRupiah(it.kredit);
+
+                    lines.push([
+                        normalizeCellText(it.tgl),
+                        normalizeCellText(it.kode),
+                        normalizeCellText(it.jenisBiaya),
+                        normalizeCellText(it.uraian),
+                        normalizeCellText(it.nama),
+                        normalizeCellText(it.an),
+                        pelunasanStr,
+                        kreditStr,
+                        totalStr,
+                        kodeKas
+                    ].join('\t'));
+                });
+            }
+
+            navigator.clipboard.writeText(lines.join('\n')).then(() => {
+                showToast("Data bersih siap tempel Excel berhasil disalin!");
+            });
+        }
+
+        function renderFeature2Display() {
+            const container = document.getElementById('dailyDisplayContainer');
+            container.innerHTML = '';
+
+            for (const [tgl, items] of Object.entries(processedDailyDataF2)) {
+                let totalPelunasan = 0, totalKreditKotor = 0;
+                let tunaiBruto = 0, pelunasanTunai = 0;
+                let bankBruto = 0, pelunasanBank = 0;
+
+                let trHtml = items.map(it => {
+                    totalPelunasan += it.pelunasan;
+                    totalKreditKotor += it.kredit;
+
+                    if (it.isBank) {
+                        bankBruto += it.kredit;
+                        pelunasanBank += it.pelunasan;
+                    } else {
+                        tunaiBruto += it.kredit;
+                        pelunasanTunai += it.pelunasan;
+                    }
+
+                    let isPelunasan = it.pelunasan > 0;
+                    let displayPelunasan = isPelunasan ? `-${formatRupiah(it.pelunasan)}` : '';
+                    let displayTotal = isPelunasan ? `-${formatRupiah(it.pelunasan)}` : formatRupiah(it.kredit);
+                    let isNegativeTotal = isPelunasan || it.kredit < 0;
+
+                    let badgeKas = it.isBank 
+                        ? `<span class="badge badge-bank">2 • Bank</span>` 
+                        : `<span class="badge badge-tunai">1 • Tunai</span>`;
+
+                    return `
+                        <tr>
+                            <td class="text-center font-bold num-font">${it.tgl}</td>
+                            <td class="text-center font-bold num-font" style="color:var(--lagoon-600);">${it.kode}</td>
+                            <td class="font-bold">${it.jenisBiaya}</td>
+                            <td>${it.uraian}</td>
+                            <td>${it.nama}</td>
+                            <td class="text-center"><span style="color:var(--slate-500); font-weight:700;">${it.an}</span></td>
+                            <td class="text-right text-red num-font">${displayPelunasan}</td>
+                            <td class="text-right num-font ${it.kredit < 0 ? 'text-red' : ''}">${formatRupiah(it.kredit)}</td>
+                            <td class="text-right font-bold num-font ${isNegativeTotal ? 'text-red' : ''}">${displayTotal}</td>
+                            <td class="text-center">${badgeKas}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+                let tunaiNetto = tunaiBruto - pelunasanTunai;
+                let bankNetto = bankBruto - pelunasanBank;
+                let grandTotalNetto = tunaiNetto + bankNetto;
+
+                let sectionHtml = `
+                    <div class="card" style="margin-bottom: 22px;">
+                        <!-- Summary Metric Cards -->
+                        <div class="stat-grid">
+                            <div class="stat-card tunai">
+                                <span class="stat-label">💵 Kas Tunai Netto (Kode 1)</span>
+                                <span class="stat-value num-font ${tunaiNetto < 0 ? 'text-red' : ''}">${formatRupiah(tunaiNetto, true)}</span>
+                            </div>
+                            <div class="stat-card bank">
+                                <span class="stat-label">🏦 Kas Bank / Transfer (Kode 2)</span>
+                                <span class="stat-value num-font ${bankNetto < 0 ? 'text-red' : ''}">${formatRupiah(bankNetto, true)}</span>
+                            </div>
+                            <div class="stat-card pelunasan">
+                                <span class="stat-label">🔻 Total Pelunasan Hutang</span>
+                                <span class="stat-value num-font text-red">-${formatRupiah(totalPelunasan, true)}</span>
+                            </div>
+                            <div class="stat-card total">
+                                <span class="stat-label">📈 Grand Total Pengeluaran Netto</span>
+                                <span class="stat-value num-font ${grandTotalNetto < 0 ? 'text-red' : ''}">${formatRupiah(grandTotalNetto, true)}</span>
+                            </div>
+                        </div>
+
+                        <!-- Table Rekap -->
+                        <div class="toolbar" style="margin-bottom: 12px;">
+                            <span style="font-weight: 800; font-size: 13.5px; color: var(--slate-900);">
+                                📅 Rekap Transaksi: <span style="color:var(--lagoon-600);">${tgl}</span> (${items.length} transaksi)
+                            </span>
+                            <button type="button" class="btn btn-primary" onclick="copyFeature2Data()">📋 Salin Data Tanggal Ini</button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" width="8%">TANGGAL</th>
+                                        <th class="text-center" width="6%">KODE</th>
+                                        <th width="15%">JENIS BIAYA</th>
+                                        <th>URAIAN</th>
+                                        <th width="13%">NAMA</th>
+                                        <th class="text-center" width="4%">A/NA</th>
+                                        <th class="text-right" width="11%" style="color:var(--coral-rose);">PELUNASAN (-)</th>
+                                        <th class="text-right" width="11%">KREDIT (RP)</th>
+                                        <th class="text-right" width="11%">TOTAL (RP)</th>
+                                        <th class="text-center" width="8%">METODE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${trHtml}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="6" class="text-center">TOTAL KESELURUHAN ${tgl}</td>
+                                        <td class="text-right text-red num-font">-${formatRupiah(totalPelunasan, true)}</td>
+                                        <td class="text-right num-font ${totalKreditKotor < 0 ? 'text-red' : ''}">${formatRupiah(totalKreditKotor, true)}</td>
+                                        <td class="text-right font-bold num-font ${grandTotalNetto < 0 ? 'text-red' : ''}" style="color:${grandTotalNetto < 0 ? 'var(--coral-rose)' : 'var(--lagoon-600)'}; font-size: 13px;">${formatRupiah(grandTotalNetto, true)}</td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += sectionHtml;
+            }
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'block';
+            setTimeout(() => { t.style.display = 'none'; }, 2400);
+        }
+    </script>
+</body>
+</html>
