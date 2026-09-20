@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Ekstraksi Jurnal & Arus Kas Keuangan Mahad</title>
     
-    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono untuk angka/kode -->
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -59,7 +59,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Bright Coastal Ambient Background */
         body {
             margin: 0;
             padding: 28px 18px;
@@ -80,7 +79,6 @@
             max-width: 1280px;
         }
 
-        /* Header Cerah & Bersih */
         .app-header {
             background: linear-gradient(120deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 253, 250, 0.85) 100%);
             backdrop-filter: blur(16px);
@@ -138,7 +136,6 @@
             letter-spacing: 0.02em;
         }
 
-        /* Modern Segmented Navigation Pill */
         .nav-dock {
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(14px);
@@ -191,7 +188,6 @@
             box-shadow: 0 4px 10px rgba(20, 184, 166, 0.3);
         }
 
-        /* Glass Card Container */
         .card {
             background: var(--glass-card);
             backdrop-filter: blur(16px);
@@ -203,7 +199,6 @@
             box-shadow: var(--glass-shadow);
         }
 
-        /* Interactive File Dropzone */
         .dropzone-box {
             border: 2px dashed #99f6e4;
             background: linear-gradient(135deg, rgba(240, 253, 250, 0.85) 0%, rgba(240, 249, 255, 0.75) 100%);
@@ -257,7 +252,6 @@
             cursor: pointer;
         }
 
-        /* Grid Controls */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
@@ -315,7 +309,6 @@
             background: #ffffff;
         }
 
-        /* Modern Buttons */
         .btn {
             border: none;
             padding: 9px 16px;
@@ -360,7 +353,6 @@
             background: var(--lagoon-50);
         }
 
-        /* Bright Floating Stat Cards */
         .stat-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -422,7 +414,6 @@
         .stat-card.total .stat-label { color: #4f46e5; }
         .stat-card.total .stat-value { color: #4338ca; }
 
-        /* Modern Tabs */
         .sub-tab-nav {
             display: flex;
             gap: 8px;
@@ -450,7 +441,6 @@
             background: #ffffff;
         }
 
-        /* Clean High-Legibility Data Tables */
         .table-responsive {
             overflow-x: auto;
             border: 1.5px solid var(--slate-200);
@@ -511,7 +501,6 @@
             border: 1px solid #bae6fd;
         }
 
-        /* Utility Styles & Minus Color */
         .text-right { text-align: right; }
         .text-center { text-align: center; }
         .font-bold { font-weight: 700; }
@@ -525,7 +514,6 @@
             gap: 12px;
         }
 
-        /* Modern Toast */
         .toast {
             position: fixed;
             bottom: 24px;
@@ -546,7 +534,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Modals */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -617,11 +604,9 @@
 </head>
 <body>
 
-    <!-- Suggestions Datalist untuk Nama PIC -->
     <datalist id="picSuggestions"></datalist>
 
     <div class="container">
-        <!-- Modern Fresh Header -->
         <div class="app-header">
             <div class="app-brand">
                 <div class="app-logo">🌊</div>
@@ -630,10 +615,9 @@
                     <p>Ekstraksi LPJ Excel ke Jurnal Buku Besar & Monitoring Arus Kas Harian</p>
                 </div>
             </div>
-            <div class="badge-bright">Plus Jakarta Sans • v2.1</div>
+            <div class="badge-bright">Plus Jakarta Sans • v2.2 (Fixed Minus)</div>
         </div>
 
-        <!-- Segmented Mode Selector -->
         <div class="nav-dock">
             <div class="nav-pill active" id="modeBtn1" onclick="switchMode(1)">
                 <div class="icon">📊</div>
@@ -645,9 +629,7 @@
             </div>
         </div>
 
-        <!-- ========================================================================= -->
-        <!-- FITUR 1: EKSTRAKTOR LPJ EXCEL KE JURNAL                                   -->
-        <!-- ========================================================================= -->
+        <!-- ======================== FITUR 1 ======================== -->
         <div id="feature1Container">
             <div class="card">
                 <div class="dropzone-box">
@@ -661,7 +643,6 @@
                 </div>
             </div>
 
-            <!-- Parameter Form -->
             <div class="card" id="formSectionF1" style="display: none;">
                 <label style="color: var(--lagoon-600); font-weight: 800; font-size: 11.5px;">2. PARAMETER KODE BIDANG & PIC:</label>
                 <div class="grid">
@@ -708,7 +689,6 @@
                 </div>
             </div>
 
-            <!-- Hasil Fitur 1 -->
             <div class="card" id="tableSectionF1" style="display: none;">
                 <div class="sub-tab-nav">
                     <button type="button" class="sub-tab-btn active" id="subTabBB" onclick="switchSubTab('bukuBesar')">Buku Besar</button>
@@ -733,16 +713,14 @@
             </div>
         </div>
 
-        <!-- ========================================================================= -->
-        <!-- FITUR 2: REKAP ARUS KAS HARIAN                                            -->
-        <!-- ========================================================================= -->
+        <!-- ======================== FITUR 2 ======================== -->
         <div id="feature2Container" style="display: none;">
             <div class="card">
                 <div class="toolbar" style="margin-bottom: 10px;">
                     <div>
                         <label style="color: var(--lagoon-600); font-weight: 800; font-size: 11.5px;">INPUT DATA TRANSAKSI DARI EXCEL / BUKU BESAR:</label>
                         <p style="margin: 3px 0 0 0; color: var(--slate-500); font-size: 11.5px;">
-                            Paste langsung baris tabel dari spreadsheet. Mendukung parsing angka bertanda minus <code style="font-family:'JetBrains Mono'">(100.000)</code> atau <code style="font-family:'JetBrains Mono'">-100.000</code>.
+                            Paste langsung baris tabel dari spreadsheet. Mendukung parsing angka bertanda minus format kurung <code style="font-family:'JetBrains Mono'">(100.000)</code>, <code style="font-family:'JetBrains Mono'">Rp (100.000)</code>, maupun <code style="font-family:'JetBrains Mono'">-100.000</code>.
                         </p>
                     </div>
                 </div>
@@ -754,12 +732,11 @@
                 </div>
             </div>
 
-            <!-- Area Tampilan Data Rekap Kas -->
             <div id="dailyDisplayContainer"></div>
         </div>
     </div>
 
-    <!-- ======================== MODAL SEARCH KODE & BIDANG ======================== -->
+    <!-- MODAL PILIH BIDANG -->
     <div class="modal-overlay" id="bidangModal">
         <div class="modal-box">
             <div class="modal-header">
@@ -771,7 +748,7 @@
         </div>
     </div>
 
-    <!-- ======================== MODAL PILIH COA ======================== -->
+    <!-- MODAL PILIH COA -->
     <div class="modal-overlay" id="coaModal">
         <div class="modal-box">
             <div class="modal-header">
@@ -786,7 +763,6 @@
     <div class="toast" id="toast">Data berhasil diproses!</div>
 
     <script>
-        /* ======================== MASTER DATA ======================== */
         const MASTER_BIDANG = [
             { code: "B11", name: "Mukafaah" },
             { code: "B12", name: "Sekretariat" },
@@ -866,30 +842,79 @@
         let activeGroupIndexToEdit = -1;
         let processedDailyDataF2 = {};
 
-        /* ======================== FORMAT & CLEANING NUMBERS (HANDLE MINUS) ======================== */
         function normalizeCellText(val) {
             if (val === null || val === undefined) return '';
-            return String(val).replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
+            return String(val)
+                .replace(/[\u00A0\u1680\u2000-\u200b\u202f\u205f\u3000\ufeff]/g, ' ')
+                .replace(/[\r\n]+/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
         }
 
+        /* ======================== PERBAIKAN UTAMA: CLEAN NUMBER ======================== */
         function cleanNumber(str) {
-            if (!str && str !== 0) return 0;
+            if (str === null || str === undefined) return 0;
+            if (typeof str === 'number') return isNaN(str) ? 0 : str;
+
             let s = str.toString().trim();
             if (!s) return 0;
 
+            // 1. Hilangkan non-breaking spaces dan tanda kutip dari clipboard
+            s = s.replace(/[\u00A0\u1680\u2000-\u200b\u202f\u205f\u3000\ufeff]/g, ' ')
+                 .replace(/["']/g, '')
+                 .trim();
+
+            if (!s || s === '-' || s === '–' || s === '—') return 0;
+
+            // 2. Deteksi apakah negatif:
+            // - Format kurung: (100.000), Rp (100.000), (Rp 100.000), dsb.
+            // - Format minus di awal/tengah/akhir: -100.000, 100.000-
             let isNeg = false;
-            if (s.startsWith('(') && s.endsWith(')')) {
+            if (s.includes('(') || s.includes(')') || s.includes('-') || s.includes('–') || s.includes('—') || /\bCR\b/i.test(s)) {
                 isNeg = true;
-                s = s.slice(1, -1).trim();
-            } else if (s.startsWith('-')) {
-                isNeg = true;
-                s = s.substring(1).trim();
             }
 
-            s = s.replace(/Rp/gi, '').replace(/\s+/g, '').replace(/\./g, '').replace(/,/g, '.').trim();
+            // 3. Buang teks Rp, IDR, CR, tanda kurung, minus/plus, dan spasi
+            s = s.replace(/Rp\.?|IDR|\bCR\b/gi, '')
+                 .replace(/[()\-–—+]/g, '')
+                 .replace(/\s+/g, '')
+                 .trim();
+
+            if (!s) return 0;
+
+            // 4. Cegah teks non-angka biasa (misal: "Buku 10", "12 pcs") dianggap nominal
+            if (/[^\d.,]/.test(s)) {
+                return 0;
+            }
+
+            // 5. Normalisasi format ribuan dan desimal (ID vs US)
+            if (s.includes('.') && s.includes(',')) {
+                if (s.lastIndexOf(',') > s.lastIndexOf('.')) {
+                    // ID: 1.000.000,00
+                    s = s.replace(/\./g, '').replace(',', '.');
+                } else {
+                    // US: 1,000,000.00
+                    s = s.replace(/,/g, '');
+                }
+            } else if (s.includes(',')) {
+                let parts = s.split(',');
+                if (parts.length === 2 && parts[1].length <= 2) {
+                    s = parts[0] + '.' + parts[1];
+                } else {
+                    s = s.replace(/,/g, '');
+                }
+            } else if (s.includes('.')) {
+                let parts = s.split('.');
+                if (parts.length === 2 && parts[1].length <= 2) {
+                    s = parts[0] + '.' + parts[1];
+                } else {
+                    s = s.replace(/\./g, '');
+                }
+            }
+
             let val = parseFloat(s);
             if (isNaN(val)) return 0;
-            return isNeg ? -Math.abs(val) : val;
+            return isNeg ? -Math.abs(val) : Math.abs(val);
         }
 
         function formatRupiah(num, withPrefix = false) {
@@ -993,7 +1018,6 @@
             return `${namaAkun} : ${keteranganTambahan}`;
         }
 
-        /* ======================== POP-UP KODE & BIDANG ======================== */
         const bidangModal = document.getElementById('bidangModal');
         const searchBidangInput = document.getElementById('searchBidangInput');
         const bidangListContainer = document.getElementById('bidangListContainer');
@@ -1030,7 +1054,6 @@
             renderTableF1();
         }
 
-        /* ======================== POP-UP COA ======================== */
         const coaModal = document.getElementById('coaModal');
         const searchCoaInput = document.getElementById('searchCoaInput');
         const coaListContainer = document.getElementById('coaListContainer');
@@ -1066,7 +1089,7 @@
             });
         }
 
-        /* ======================== FITUR 1 ======================== */
+        /* ======================== PROSES FITUR 1 ======================== */
         const fileInput = document.getElementById('fileInput');
         const dropzoneLabel = document.getElementById('dropzoneLabel');
         const sheetSelect = document.getElementById('sheetSelect');
@@ -1202,7 +1225,7 @@
                 if (currentGroup) {
                     let uraian = colMap.uraian !== -1 ? getCellText(row.getCell(colMap.uraian)) : '';
                     if (!uraian) {
-                        let cand = rowCells.find(c => isNaN(cleanNumber(c.text)) && c.text.length > 2);
+                        let cand = rowCells.find(c => cleanNumber(c.text) === 0 && c.text.length > 2);
                         if (cand) uraian = cand.text;
                     }
                     if (!uraian) return;
@@ -1372,7 +1395,7 @@
             showToast("Data berhasil dipindahkan ke Rekap Kas Harian!");
         }
 
-        /* ======================== FITUR 2 ======================== */
+        /* ======================== PERBAIKAN FITUR 2: REKAP KAS ======================== */
         function processFeature2Data() {
             const raw = document.getElementById('rawInputF2').value.trim();
             if (!raw) return alert("Silakan paste data transaksi terlebih dahulu!");
@@ -1383,39 +1406,96 @@
             parsedRows.forEach(cols => {
                 if (cols.length < 4) return;
                 let col0 = normalizeCellText(cols[0]);
-                if (col0.toLowerCase().includes('tanggal') || col0.toLowerCase().includes('buku') || col0.toLowerCase().includes('saldo')) return;
+                if (!col0 || col0.toLowerCase().includes('tanggal') || col0.toLowerCase().includes('buku') || col0.toLowerCase().includes('saldo') || col0.toLowerCase().includes('total')) return;
 
                 let tgl = col0;
-                let kode = cols[1] ? normalizeCellText(cols[1]) : '';
-                let jenisBiaya = cols[2] ? normalizeCellText(cols[2]) : '';
-                let uraian = cols[5] ? normalizeCellText(cols[5]) : (cols[3] ? normalizeCellText(cols[3]) : '');
-                let nama = cols[6] ? normalizeCellText(cols[6]) : (cols[4] ? normalizeCellText(cols[4]) : '');
-                let an = cols[7] ? normalizeCellText(cols[7]) : (cols[5] ? normalizeCellText(cols[5]) : 'na');
-                
-                let debet = cleanNumber(cols[9]);
-                let kredit = cleanNumber(cols[11] || cols[7] || cols[6] || 0);
-
-                if (debet > 0 && kredit === 0) return;
-                if (uraian.toLowerCase().includes('tambahan kas') || uraian.toLowerCase().includes('saldo akhir')) return;
-
+                let kode = '', jenisBiaya = '', uraian = '', nama = '', an = 'na';
+                let debet = 0, kredit = 0, pelunasanDirect = 0;
                 let tipeKas = '1';
-                if (cols.length >= 11 && (cols[10]?.trim() === '1' || cols[10]?.trim() === '2')) {
-                    tipeKas = cols[10].trim();
-                } else if (cols[cols.length - 1]?.trim() === '1' || cols[cols.length - 1]?.trim() === '2') {
-                    tipeKas = cols[cols.length - 1].trim();
+
+                if (cols.length >= 12) {
+                    // Format Buku Besar Standar (12 Kolom)
+                    kode = cols[1];
+                    jenisBiaya = cols[2];
+                    uraian = cols[5];
+                    nama = cols[6];
+                    an = cols[7] || 'na';
+                    debet = cleanNumber(cols[9]);
+                    tipeKas = (cols[10]?.trim() === '2') ? '2' : '1';
+                    kredit = cleanNumber(cols[11]);
+                } else if (cols.length === 10) {
+                    // Format Tabel Rekap Kas (10 Kolom)
+                    kode = cols[1];
+                    jenisBiaya = cols[2];
+                    uraian = cols[3];
+                    nama = cols[4];
+                    an = cols[5] || 'na';
+                    pelunasanDirect = Math.abs(cleanNumber(cols[6]));
+                    kredit = cleanNumber(cols[7]);
+                    if (pelunasanDirect > 0 && kredit === 0) {
+                        kredit = -pelunasanDirect;
+                    }
+                    tipeKas = (cols[9]?.toString().includes('2')) ? '2' : '1';
                 } else {
-                    let found = cols.slice(6).find(c => c.trim() === '1' || c.trim() === '2');
-                    if (found) tipeKas = found.trim();
+                    // Fleksibel (7 - 11 Kolom)
+                    kode = cols[1] || '';
+                    jenisBiaya = cols[2] || '';
+                    uraian = cols[3] || '';
+                    nama = cols[4] || '';
+                    an = cols[5] || 'na';
+
+                    let numCandidates = [];
+                    for (let i = 6; i < cols.length; i++) {
+                        let rawVal = cols[i]?.trim();
+                        if (rawVal === '1' || rawVal === '2') {
+                            tipeKas = rawVal;
+                        } else {
+                            let num = cleanNumber(cols[i]);
+                            if (num !== 0 || cols[i].includes('0')) {
+                                numCandidates.push(num);
+                            }
+                        }
+                    }
+                    if (numCandidates.length > 0) {
+                        kredit = numCandidates[numCandidates.length - 1];
+                        if (numCandidates.length > 1 && numCandidates[0] < 0) {
+                            kredit = numCandidates[0];
+                        }
+                    }
                 }
 
+                tgl = normalizeCellText(tgl);
+                kode = normalizeCellText(kode);
+                jenisBiaya = normalizeCellText(jenisBiaya);
+                uraian = normalizeCellText(uraian);
+                nama = normalizeCellText(nama);
+                an = normalizeCellText(an);
+
+                if (uraian.toLowerCase().includes('tambahan kas') || uraian.toLowerCase().includes('saldo akhir') || uraian.toLowerCase().includes('saldo awal')) return;
+
+                // Tangani pelunasan jika tertulis di kolom Debet (baik bertanda minus maupun positif dengan uraian pelunasan)
+                if (kredit === 0 && debet !== 0) {
+                    if (debet < 0 || uraian.toLowerCase().includes('pelunasan') || uraian.toLowerCase().includes('pengembalian')) {
+                        kredit = -Math.abs(debet);
+                    } else {
+                        return; // Penerimaan kas murni, abaikan
+                    }
+                } else if (debet > 0 && kredit === 0) {
+                    return;
+                }
+
+                if (kredit === 0 && pelunasanDirect === 0) return;
+
                 let isBank = (tipeKas === '2');
-                let isPelunasan = kredit < 0 || uraian.toLowerCase().includes('pelunasan');
+                let isPelunasan = kredit < 0 || pelunasanDirect > 0 || uraian.toLowerCase().includes('pelunasan');
+                let nominalPelunasan = pelunasanDirect > 0 ? pelunasanDirect : (isPelunasan ? Math.abs(kredit) : 0);
+                let nominalKredit = !isPelunasan ? kredit : 0;
 
                 if (!dailyRaw[tgl]) dailyRaw[tgl] = [];
                 dailyRaw[tgl].push({
                     tgl, kode, jenisBiaya, uraian, nama, an, isBank,
-                    pelunasan: isPelunasan ? Math.abs(kredit) : 0,
-                    kredit: !isPelunasan ? kredit : 0
+                    pelunasan: nominalPelunasan,
+                    kredit: nominalKredit
                 });
             });
 
@@ -1463,9 +1543,9 @@
                     let isPelunasan = it.pelunasan > 0;
                     let kodeKas = it.isBank ? '2' : '1';
                     
-                    let pelunasanStr = isPelunasan ? `-${formatRupiah(it.pelunasan)}` : '';
+                    let pelunasanStr = isPelunasan ? `-${formatRupiah(Math.abs(it.pelunasan))}` : '';
                     let kreditStr = it.kredit !== 0 ? formatRupiah(it.kredit) : '';
-                    let totalStr = isPelunasan ? `-${formatRupiah(it.pelunasan)}` : formatRupiah(it.kredit);
+                    let totalStr = isPelunasan ? `-${formatRupiah(Math.abs(it.pelunasan))}` : formatRupiah(it.kredit);
 
                     lines.push([
                         normalizeCellText(it.tgl),
@@ -1509,8 +1589,8 @@
                     }
 
                     let isPelunasan = it.pelunasan > 0;
-                    let displayPelunasan = isPelunasan ? `-${formatRupiah(it.pelunasan)}` : '';
-                    let displayTotal = isPelunasan ? `-${formatRupiah(it.pelunasan)}` : formatRupiah(it.kredit);
+                    let displayPelunasan = isPelunasan ? `-${formatRupiah(Math.abs(it.pelunasan))}` : '';
+                    let displayTotal = isPelunasan ? `-${formatRupiah(Math.abs(it.pelunasan))}` : formatRupiah(it.kredit);
                     let isNegativeTotal = isPelunasan || it.kredit < 0;
 
                     let badgeKas = it.isBank 
@@ -1539,7 +1619,6 @@
 
                 let sectionHtml = `
                     <div class="card" style="margin-bottom: 22px;">
-                        <!-- Summary Metric Cards -->
                         <div class="stat-grid">
                             <div class="stat-card tunai">
                                 <span class="stat-label">💵 Kas Tunai Netto (Kode 1)</span>
@@ -1551,7 +1630,7 @@
                             </div>
                             <div class="stat-card pelunasan">
                                 <span class="stat-label">🔻 Total Pelunasan Hutang</span>
-                                <span class="stat-value num-font text-red">-${formatRupiah(totalPelunasan, true)}</span>
+                                <span class="stat-value num-font text-red">-${formatRupiah(Math.abs(totalPelunasan), true)}</span>
                             </div>
                             <div class="stat-card total">
                                 <span class="stat-label">📈 Grand Total Pengeluaran Netto</span>
@@ -1559,7 +1638,6 @@
                             </div>
                         </div>
 
-                        <!-- Table Rekap -->
                         <div class="toolbar" style="margin-bottom: 12px;">
                             <span style="font-weight: 800; font-size: 13.5px; color: var(--slate-900);">
                                 📅 Rekap Transaksi: <span style="color:var(--lagoon-600);">${tgl}</span> (${items.length} transaksi)
@@ -1589,7 +1667,7 @@
                                 <tfoot>
                                     <tr>
                                         <td colspan="6" class="text-center">TOTAL KESELURUHAN ${tgl}</td>
-                                        <td class="text-right text-red num-font">-${formatRupiah(totalPelunasan, true)}</td>
+                                        <td class="text-right text-red num-font">${totalPelunasan > 0 ? '-' + formatRupiah(Math.abs(totalPelunasan), true) : ''}</td>
                                         <td class="text-right num-font ${totalKreditKotor < 0 ? 'text-red' : ''}">${formatRupiah(totalKreditKotor, true)}</td>
                                         <td class="text-right font-bold num-font ${grandTotalNetto < 0 ? 'text-red' : ''}" style="color:${grandTotalNetto < 0 ? 'var(--coral-rose)' : 'var(--lagoon-600)'}; font-size: 13px;">${formatRupiah(grandTotalNetto, true)}</td>
                                         <td></td>
